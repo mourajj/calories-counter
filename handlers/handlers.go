@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/joho/godotenv"
 )
 
 var input *model.Input
@@ -82,6 +84,7 @@ func InputHandler(w http.ResponseWriter, r *http.Request) {
 
 func processGPTResponse() string {
 
+	godotenv.Load(".env")
 	food := input.Food     // Change for the desired food
 	amount := input.Amount // Change for the desired amount
 	cooked := ""
@@ -91,13 +94,13 @@ func processGPTResponse() string {
 	}
 
 	// Using chatGPT to generate the response
-	prompt := fmt.Sprintf("Me diga quantas calorias exatas tem %v gramas de %s %s de acordo com a Tabela de Composição de Alimentos do IBGE", amount, food, cooked)
+	prompt := fmt.Sprintf("Me diga somente o valor de quantas calorias tem %v gramas de %s %s de acordo com a Tabela de Composição de Alimentos do IBGE", amount, food, cooked)
 	response, err := GetChatGPTResponse(prompt)
 	if err != nil {
 		log.Panic("Erro ao obter resposta do ChatGPT:", err)
 	}
 
-	// Extracting the JSON response
+	// Extract the JSON response
 	var chatGPTResponse model.ChatGPTResponse
 	err = json.Unmarshal(response, &chatGPTResponse)
 	if err != nil {
