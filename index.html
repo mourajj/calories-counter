@@ -107,27 +107,27 @@
     function minhaFuncao(valor) {
         console.log("Valor recebido: " + valor);
     }
-      // Quando o formulário for submetido
+      // When the form is submitted
       $("#myForm").submit(function(event) {
-          // Evita o comportamento padrão de submeter o formulário
+          // Prevent the default action to submit the form and refresh the page
           event.preventDefault();
 
-          // Obtém os dados do formulário
+          // Get the form data
           var formData = $(this).serialize();
 
-          // Envia uma requisição AJAX via POST para a URL desejada
+          // Send an ajax post request to the desired API
           $.ajax({
               url: "http://localhost:5500/input",
               method: "POST",
               data: formData,
               success: function(response) {
-                  // Trata a resposta do servidor sem atualizar a página
+                  //Handle server's response without refreshing the page
                   console.log(response);
                   var textarea = document.getElementById("mensagem");
                   textarea.value = response;
               },
               error: function(xhr, status, error) {
-                  // Trata erros de requisição, se houverem
+                  // Handle request errors
                   console.log(error);
               }
           });
