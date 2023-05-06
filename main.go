@@ -3,11 +3,15 @@ package main
 import (
 	"calories-counter/handlers"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	godotenv.Load()
 
 	//Starting router
 	r := mux.NewRouter()
@@ -20,5 +24,5 @@ func main() {
 	})
 
 	//Setting the HTTP server to listen to the port 5500
-	http.ListenAndServe(":5500", r)
+	http.ListenAndServe(":"+os.Getenv("PORT"), r)
 }
