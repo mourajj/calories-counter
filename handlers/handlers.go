@@ -46,6 +46,7 @@ func GetChatGPTResponse(prompt string) ([]byte, error) {
 
 func InputHandler(w http.ResponseWriter, r *http.Request) {
 	// Recebe o valor da caixa de texto do formulário
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	food := r.FormValue("food")
 	amount := r.FormValue("amount")

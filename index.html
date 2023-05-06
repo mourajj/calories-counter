@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Diet Assistant</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
 
       body{
@@ -90,7 +91,7 @@
   </head>
   <body>
     <h1>Go - Diet Assistant</h1>
-    <form method="POST" action="/input">
+    <form id="myForm" method="POST" action="/input">
       <label for="food">food:</label>
       <input type="text" id="food" name="food">
       <label for="amount">amount:</label>
@@ -101,5 +102,30 @@
       </label>
       <input type="submit" value="Enviar">
     </form>
+    <script>
+      // Quando o formulário for submetido
+      $("#myForm").submit(function(event) {
+          // Evita o comportamento padrão de submeter o formulário
+          event.preventDefault();
+
+          // Obtém os dados do formulário
+          var formData = $(this).serialize();
+
+          // Envia uma requisição AJAX via POST para a URL desejada
+          $.ajax({
+              url: "http://localhost:5500/input",
+              method: "POST",
+              data: formData,
+              success: function(response) {
+                  // Trata a resposta do servidor sem atualizar a página
+                  console.log(response);
+              },
+              error: function(xhr, status, error) {
+                  // Trata erros de requisição, se houverem
+                  console.log(error);
+              }
+          });
+      });
+  </script>
   </body>
 </html>
