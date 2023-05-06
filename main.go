@@ -15,11 +15,11 @@ import (
 func main() {
 	//Loading environment variables
 	godotenv.Load(".env")
-	food := "salmao" // Change for the desired food
-	amount := 100.0  // Change for the desired amount
+	food := "arroz branco" // Change for the desired food
+	amount := 100.0        // Change for the desired amount
 
 	// Using chatGPT to generate the response
-	prompt := fmt.Sprintf("Me diga somente a quantidade de calorias (numero) que tem em %v gramas de %s", amount, food)
+	prompt := fmt.Sprintf("Me diga somente a quantidade exata de calorias (numero) que tem em %v gramas de %s", amount, food)
 	response, err := getChatGPTResponse(prompt)
 	if err != nil {
 		fmt.Println("Erro ao obter resposta do ChatGPT:", err)
