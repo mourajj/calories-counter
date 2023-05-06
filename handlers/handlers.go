@@ -2,10 +2,13 @@ package handlers
 
 import (
 	"bytes"
+	"calories-counter/model"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func GetChatGPTResponse(prompt string) ([]byte, error) {
@@ -39,4 +42,31 @@ func GetChatGPTResponse(prompt string) ([]byte, error) {
 	}
 
 	return responseBody, nil
+}
+
+func InputHandler(w http.ResponseWriter, r *http.Request) {
+	// Recebe o valor da caixa de texto do formulário
+
+	food := r.FormValue("food")
+	amount := r.FormValue("amount")
+
+	input := model.Input{
+		Food:   food,
+		Amount: amount,
+	}
+
+	// Converte o valor recebido de string para bool
+	if r.FormValue("cooked") != "" {
+		cooked, err := strconv.ParseBool(r.FormValue("cooked"))
+		if err != nil {
+			// Trata o erro, se houver
+			http.Error(w, "Valor inválido", http.StatusBadRequest)
+			return
+		}
+		input.Cooked = cooked
+	}
+
+	fmt.Println(input.Food)
+	fmt.Println(input.Amount)
+	fmt.Println(input.Cooked)
 }

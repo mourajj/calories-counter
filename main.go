@@ -5,12 +5,21 @@ import (
 	"calories-counter/model"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	//Starting router and listen to 5500 port
+	r := mux.NewRouter()
+	r.HandleFunc("/input", handlers.InputHandler).Methods("POST")
+	http.ListenAndServe(":5500", r)
+
 	//Loading environment variables
+
 	godotenv.Load(".env")
 	food := "arroz branco" // Change for the desired food
 	amount := 100.0        // Change for the desired amount

@@ -19,7 +19,7 @@
       }
       
       /* Estilo para as caixas de entrada de texto */
-      input[type=text], input[type=quantidade] {
+      input[type=text], input[type=amount] {
         padding: 15px;
         border-radius: 5px;
         border: none;
@@ -90,17 +90,16 @@
   </head>
   <body>
     <h1>Go - Diet Assistant</h1>
-    <form>
-      <label for="alimento">Alimento:</label>
-      <input type="text" id="alimento" name="alimento">
-      <label for="quantidade">Quantidade:</label>
-      <input type="quantidade" id="quantidade" name="quantidade">
-      <label for="newsletter">
+    <form method="POST" action="/input">
+      <label for="food">food:</label>
+      <input type="text" id="food" name="food">
+      <label for="amount">amount:</label>
+      <input type="amount" id="amount" name="amount">
+      <label for="cooked">
         O alimento é cozido?
-        <input type="checkbox" id="newsletter" name="newsletter" value="sim">
+        <input type="checkbox" id="cooked" name="cooked" value="true">
       </label>
       <input type="submit" value="Enviar">
-      <textarea id="mensagem" name="mensagem" rows="5"></textarea>
     </form>
   </body>
 </html>
