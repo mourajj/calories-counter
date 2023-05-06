@@ -21,7 +21,7 @@ func GetChatGPTResponse(prompt string) ([]byte, error) {
 	//Creating the requestbody for openAPI endpoint
 	requestBody, err := json.Marshal(map[string]interface{}{
 		"prompt":      prompt,
-		"max_tokens":  150,
+		"max_tokens":  15,
 		"temperature": 1,
 	})
 	if err != nil {
@@ -94,7 +94,7 @@ func processGPTResponse() string {
 	}
 
 	// Using chatGPT to generate the response
-	prompt := fmt.Sprintf("Me diga somente o valor de quantas calorias tem %v gramas de %s %s de acordo com a Tabela de Composição de Alimentos do IBGE ou USDA", amount, food, cooked)
+	prompt := fmt.Sprintf("Calcula a média de quantas calorias tem em %v gramas de %s %s usando diversas bases de dados e me dê somente o valor com no maximo 5 caracteres", amount, food, cooked)
 	response, err := GetChatGPTResponse(prompt)
 	if err != nil {
 		log.Panic("Erro ao obter resposta do ChatGPT:", err)
