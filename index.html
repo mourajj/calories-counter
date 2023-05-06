@@ -101,8 +101,12 @@
         <input type="checkbox" id="cooked" name="cooked" value="true">
       </label>
       <input type="submit" value="Enviar">
+      <textarea id="mensagem" name="mensagem" rows="5">output</textarea>
     </form>
     <script>
+    function minhaFuncao(valor) {
+        console.log("Valor recebido: " + valor);
+    }
       // Quando o formulário for submetido
       $("#myForm").submit(function(event) {
           // Evita o comportamento padrão de submeter o formulário
@@ -119,6 +123,8 @@
               success: function(response) {
                   // Trata a resposta do servidor sem atualizar a página
                   console.log(response);
+                  var textarea = document.getElementById("mensagem");
+                  textarea.value = response;
               },
               error: function(xhr, status, error) {
                   // Trata erros de requisição, se houverem
