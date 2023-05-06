@@ -9,7 +9,11 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/joho/godotenv"
 )
+
+var input *model.Input
 
 func GetChatGPTResponse(prompt string) ([]byte, error) {
 	requestBody, err := json.Marshal(map[string]interface{}{
@@ -51,7 +55,7 @@ func InputHandler(w http.ResponseWriter, r *http.Request) {
 	food := r.FormValue("food")
 	amount := r.FormValue("amount")
 
-	input := model.Input{
+	input = &model.Input{
 		Food:   food,
 		Amount: amount,
 	}
@@ -67,7 +71,37 @@ func InputHandler(w http.ResponseWriter, r *http.Request) {
 		input.Cooked = cooked
 	}
 
-	fmt.Println(input.Food)
-	fmt.Println(input.Amount)
-	fmt.Println(input.Cooked)
+	processGPTResponse()
+}
+
+func processGPTResponse() {
+	//Loading environment variables
+
+	godotenv.Load(".env")
+	food := input.Food     // Change for the desired food
+	amount := input.Amount // Change for the desired amount
+	cozido := ""
+
+	if input.Cooked {
+		cozido = "cozido"
+	}
+
+	// Using chatGPT to generate the response
+	prompt := fmt.Sprintf("Me diga somente a quantidade exata de calorias sem mudar o valor (numero) que tem em %v gramas de %s %s", amount, food, cozido)
+	response, err := GetChatGPTResponse(prompt)
+	if err != nil {
+		fmt.Println("Erro ao obter resposta do ChatGPT:", err)
+		return
+	}
+
+	// Extract the JSON response
+	var chatGPTResponse model.ChatGPTResponse
+	err = json.Unmarshal(response, &chatGPTResponse)
+	if err != nil {
+		fmt.Println("Erro ao analisar resposta do ChatGPT:", err)
+		return
+	}
+
+	message := chatGPTResponse.Choices[0].Text
+	fmt.Println(message)
 }
