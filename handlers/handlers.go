@@ -18,7 +18,7 @@ var input *model.Input
 
 func GetChatGPTResponse(prompt string) ([]byte, error) {
 
-	//Creating the requestbody for openAPI endpoint
+	//Creating the request body for openAPI endpoint
 	requestBody, err := json.Marshal(map[string]interface{}{
 		"prompt":      prompt,
 		"max_tokens":  15,
@@ -80,15 +80,17 @@ func InputHandler(w http.ResponseWriter, r *http.Request) {
 
 func processAndCreateGPTResponse() string {
 
+	//Loading env variables
 	godotenv.Load(".env")
-	cooked := ""
 
+	//Handling cooked option
+	cooked := ""
 	if input.Cooked {
 		cooked = "cozido"
 	}
 
 	// Using chatGPT to generate the response
-	prompt := fmt.Sprintf("Calcula a média de quantas calorias tem em %v gramas de %s %s usando diversas bases de dados e me dê somente o valor com no maximo 5 caracteres", input.Amount, input.Food, cooked)
+	prompt := fmt.Sprintf("Calcula a média de quantas calorias tem em %v gramas de %s %s usando bases de dados confiveis e me dê somente o valor com no maximo 5 caracteres", input.Amount, input.Food, cooked)
 	response, err := GetChatGPTResponse(prompt)
 	if err != nil {
 		log.Panic("Erro ao obter resposta do ChatGPT:", err)
@@ -98,7 +100,7 @@ func processAndCreateGPTResponse() string {
 	var chatGPTResponse model.ChatGPTResponse
 	err = json.Unmarshal(response, &chatGPTResponse)
 	if err != nil {
-		log.Panic("Erro ao analisar resposta do ChatGPT:", err)
+		log.Panic("Erro ao converter resposta do ChatGPT:", err)
 	}
 
 	//Returning the message
