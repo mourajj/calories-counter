@@ -18,7 +18,7 @@ var input *model.Input
 
 func GetChatGPTResponse(prompt string) ([]byte, error) {
 
-	//Creating the requestbody for openAPI endpoint
+	//Creating the request body for openAPI endpoint
 	requestBody, err := json.Marshal(map[string]interface{}{
 		"prompt":      prompt,
 		"max_tokens":  15,
@@ -57,14 +57,10 @@ func GetChatGPTResponse(prompt string) ([]byte, error) {
 
 func InputHandler(w http.ResponseWriter, r *http.Request) {
 
-	//Getting the user input values
-	food := r.FormValue("food")
-	amount := r.FormValue("amount")
-
-	//Creating an input object
+	//Creating an input object with user input
 	input = &model.Input{
-		Food:   food,
-		Amount: amount,
+		Food:   r.FormValue("food"),
+		Amount: r.FormValue("amount"),
 	}
 
 	// Converting the bool value (if exists)
@@ -79,22 +75,22 @@ func InputHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Process the GPT question and return the response according to the inputs
-	w.Write([]byte(processGPTResponse()))
+	w.Write([]byte(processAndCreateGPTResponse()))
 }
 
-func processGPTResponse() string {
+func processAndCreateGPTResponse() string {
 
+	//Loading env variables
 	godotenv.Load(".env")
-	food := input.Food     // Change for the desired food
-	amount := input.Amount // Change for the desired amount
-	cooked := ""
 
+	//Handling cooked option
+	cooked := ""
 	if input.Cooked {
 		cooked = "cozido"
 	}
 
 	// Using chatGPT to generate the response
-	prompt := fmt.Sprintf("Calcula a média de quantas calorias tem em %v gramas de %s %s usando diversas bases de dados e me dê somente o valor com no maximo 5 caracteres", amount, food, cooked)
+	prompt := fmt.Sprintf("Calcula a média de quantas calorias tem em %v gramas de %s %s usando bases de dados confiveis e me dê somente o valor com no maximo 5 caracteres", input.Amount, input.Food, cooked)
 	response, err := GetChatGPTResponse(prompt)
 	if err != nil {
 		log.Panic("Erro ao obter resposta do ChatGPT:", err)
@@ -104,7 +100,7 @@ func processGPTResponse() string {
 	var chatGPTResponse model.ChatGPTResponse
 	err = json.Unmarshal(response, &chatGPTResponse)
 	if err != nil {
-		log.Panic("Erro ao analisar resposta do ChatGPT:", err)
+		log.Panic("Erro ao converter resposta do ChatGPT:", err)
 	}
 
 	//Returning the message

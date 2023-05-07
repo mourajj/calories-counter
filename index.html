@@ -1,157 +1,170 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diet Assistant</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
 
-      body{
-        background-color: #1d1d1d;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-      }
-
-      .main-content {
-        flex: 1; /* Define a largura do conteúdo principal para preencher o espaço restante */
-      }
-      /* Estilo para o formulário */
-      form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 50px;
-        border-radius: 10px;
-        max-width: 600px; /* adicionado para limitar a largura máxima do formulário */
-        margin: 0 auto; /* adicionado para centralizar o formulário horizontalmente */
-      }
-      
-      /* Estilo para as caixas de entrada de texto */
-      input[type=text], input[type=number] {
-        padding: 15px;
-        border-radius: 5px;
-        border: none;
-        margin-bottom: 20px;
-        width: 70%;
-        font-size: 16px;
-        font-family: 'Roboto', sans-serif;
-        background-color: #303030;
-        color: #fff;
-      }
-      
-      /* Estilo para as caixas de seleção */
-      input[type=checkbox] {
-        margin-right: 10px;
-        transform: scale(1.5);
-      }
-      
-      /* Estilo para as etiquetas de caixas de seleção */
-      label {
-        font-size: 16px;
-        font-family: 'Roboto', sans-serif;
-        color: #fff;
-        margin-bottom:2px;
-      }
-      label.warning{
-        color: #fff;
-        font-size: 13px;
-        margin-top:2px;
-      }
-      label input[type=checkbox] {
-        display: inline-flex; /* ou display: inline-block; */
-        vertical-align: middle;
-        margin-left: 10px;
-}
-      textarea{
-        margin-top: 30px;
-        max-height: 150px;
-        max-width: 1000px;
-        overflow: auto;
-        width: 100%;
-        height: 150px;
-        background-color: #303030;
-        font-size: 16px;
-        font-family: 'Roboto', sans-serif;
-        color: #fff;
-      }
-      
-      /* Estilo para o botão Enviar */
-      input[type=submit] {
-        margin-top: 10px;
-        background-color: #007bff;
-        color: #fff;
-        padding: 15px;
-        border-radius: 5px;
-        border: none;
-        width: 78%;
-        font-size: 16px;
-        font-family: 'Roboto', sans-serif;
-        cursor: pointer;
-        transition: all .2s ease-in-out;
-      }
-      
-      input[type=submit]:hover {
-        background-color: #0062cc;
-      }
-      
-      /* Estilo para o título da página */
-      h1 {
-        text-align: center;
-        margin-bottom: 50px;
-        font-size: 36px;
-        font-weight: 500;
-        font-family: 'Roboto', sans-serif;
-        color: #fff;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Go - Diet Assistant</h1>
-    <form id="myForm" method="POST" action="/input">
-      <label for="food" >Alimento</label>
-      <input type="text" placeholder="Exemplo: Arroz branco" id="food" name="food" maxlength="25">
-      <label for="amount">Quantidade (em gramas):</label>
-      <input type="number" placeholder="Exemplo: 150" id="amount" name="amount" min="0" max="999" oninput="javascript: if (this.value.length > 3) this.value = this.value.slice(0,3);">
-      <label for="cooked">
-        O alimento é cozido?
-        <input type="checkbox" id="cooked" name="cooked" value="true">
-      </label>
-      <input type="submit" value="Enviar">
-      <textarea readonly id="mensagem" name="mensagem" rows="5"></textarea>
-      <label class="warning">O output pode variar devido ao acesso de diferentes bases de dados pela IA</label>
-    </form>
-    <script>
-    function minhaFuncao(valor) {
-        console.log("Valor recebido: " + valor);
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diet Assistant</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      background-color: #1d1d1d;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-      // When the form is submitted
-      $("#myForm").submit(function(event) {
-          // Prevent the default action to submit the form and refresh the page
-          event.preventDefault();
 
-          // Get the form data
-          var formData = $(this).serialize();
+    .main-content {
+      flex: 1;
+      /* Define a largura do conteúdo principal para preencher o espaço restante */
+    }
 
-          // Send an ajax post request to the desired API
-          $.ajax({
-              url: "/input",
-              method: "POST",
-              data: formData,
-              success: function(response) {
-                  //Handle server's response without refreshing the page
-                  console.log(response);
-                  var textarea = document.getElementById("mensagem");
-                  textarea.value = response;
-              },
-              error: function(xhr, status, error) {
-                  // Handle request errors
-                  console.log(error);
-              }
-          });
+    /* Estilo para o formulário */
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px;
+      border-radius: 10px;
+      max-width: 600px;
+      /* adicionado para limitar a largura máxima do formulário */
+      margin: 0 auto;
+      /* adicionado para centralizar o formulário horizontalmente */
+    }
+
+    /* Estilo para as caixas de entrada de texto */
+    input[type=text],
+    input[type=number] {
+      padding: 15px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 20px;
+      width: 70%;
+      font-size: 16px;
+      font-family: 'Roboto', sans-serif;
+      background-color: #303030;
+      color: #fff;
+    }
+
+    /* Estilo para as caixas de seleção */
+    input[type=checkbox] {
+      margin-right: 10px;
+      transform: scale(1.5);
+    }
+
+    /* Estilo para as etiquetas de caixas de seleção */
+    label {
+      font-size: 16px;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    label.warning {
+      color: #fff;
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    label input[type=checkbox] {
+      display: inline-flex;
+      /* ou display: inline-block; */
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+
+    textarea {
+      margin-top: 30px;
+      max-height: 150px;
+      max-width: 1000px;
+      overflow: auto;
+      width: 100%;
+      height: 150px;
+      background-color: #303030;
+      font-size: 16px;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+    }
+
+    /* Estilo para o botão Enviar */
+    input[type=submit] {
+      margin-top: 10px;
+      background-color: #007bff;
+      color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      border: none;
+      width: 78%;
+      font-size: 16px;
+      font-family: 'Roboto', sans-serif;
+      cursor: pointer;
+      transition: all .2s ease-in-out;
+    }
+
+    input[type=submit]:hover {
+      background-color: #0062cc;
+    }
+
+    /* Estilo para o título da página */
+    h1 {
+      text-align: center;
+      margin-bottom: 50px;
+      font-size: 36px;
+      font-weight: 500;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Go - Diet Assistant</h1>
+  <form id="myForm" method="POST" action="/input">
+    <label for="food">Alimento</label>
+    <input type="text" placeholder="Exemplo: Arroz branco" id="food" name="food" maxlength="25">
+    <label for="amount">Quantidade (em gramas):</label>
+    <input type="number" placeholder="Exemplo: 150" id="amount" name="amount" min="0" max="999"
+      oninput="javascript: if (this.value.length > 3) this.value = this.value.slice(0,3);">
+    <label for="cooked">
+      O alimento é cozido?
+      <input type="checkbox" id="cooked" name="cooked" value="true">
+    </label>
+    <input type="submit" value="Enviar">
+    <textarea readonly id="mensagem" name="mensagem" rows="5"></textarea>
+    <label class="warning">O output pode variar devido ao acesso de diferentes bases de dados pela IA</label>
+  </form>
+  <script>
+    function minhaFuncao(valor) {
+      console.log("Valor recebido: " + valor);
+    }
+    // When the form is submitted
+    $("#myForm").submit(function (event) {
+      // Prevent the default action to submit the form and refresh the page
+      event.preventDefault();
+
+      // Get the form data
+      var formData = $(this).serialize();
+
+      // Send an ajax post request to the desired API
+      $.ajax({
+        url: "/input",
+        method: "POST",
+        data: formData,
+        success: function (response) {
+          //Handle server's response without refreshing the page
+          console.log(response);
+          //Gets the /input response and update the textarea
+          var textarea = document.getElementById("mensagem");
+          textarea.value = response;
+        },
+        error: function (xhr, status, error) {
+          // Handle request errors
+          console.log(error);
+        }
       });
+    });
   </script>
-  </body>
+</body>
+
 </html>

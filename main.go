@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-
+	//Loading env variables
 	godotenv.Load()
 
 	//Starting router
